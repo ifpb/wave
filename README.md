@@ -1,2 +1,2 @@
 # wave
-Gerador de cargas multiplas para experimentação em redes de computadores
+Gerador de cargas múltiplas para experimentação em redes de computadores
