@@ -1,5 +1,4 @@
-# wave
-Gerador de cargas múltiplas para experimentação em redes de computadores
+# WAVE - Gerador de cargas múltiplas para experimentação em redes de computadores
 
 ## Configurator WAVE 
 
