@@ -1,0 +1,14 @@
+{% extends 'model.html' %} {% block content %}
+<div class="m-3" style="min-height: 410px">
+  <h3 class="text-center">Analysis Result</h3>
+  <pre>{{ res_analysis_result }}</pre>
+  <a
+    href="{{ grafana }}"
+    type="button"
+    target="_blank"
+    class="btn btn-secondary btn-sm"
+    >result grafana</a
+  >
+</div>
+
+{% endblock %}

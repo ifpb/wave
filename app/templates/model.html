@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel=stylesheet type=text/css href="../static/style.css"/>
+    <link rel="icon" type="imagem/svg" href="../static/favicon.svg" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <title>{% block title %} Conf - WAVE {% endblock %}</title>
+  </head>
+
+  <body>
+    <header class="header-container">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/">
+            <img src="../static/wave.svg" width="24" height="24" alt="" /> Conf
+            - WAVE</a
+          >
+          
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="true" aria-label="Alterna navegação">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        
+          <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+              <li class="nav-item active">
+                <a class="nav-link" aria-current="page" href="/">Home <span class="sr-only"></span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/config">Config</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link " aria-current="page" href="/results">Results</a>
+              </li>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <div class="container">{% block content %} {% endblock %}</div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-footer">© 2023 Copyright IFPB, UFSCar, UFU</p>
+  </footer>
+</html>

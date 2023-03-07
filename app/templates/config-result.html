@@ -1,0 +1,40 @@
+<!--
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+       function funcao1(){
+		       	swal("","Provisionamento realizado com sucesso", "success")
+                }
+       function funcao2(){
+		       swal("","Ambiente finalizado com sucesso", "success")
+                }
+</script>
+-->
+
+{% extends 'model.html' %} {% block content %}
+<div class="m-3">
+  <h3>Configuration result</h3>
+</div>
+<pre>{{ conf }}</pre>
+<a
+  href="{{url_for('provision_up')}}"
+  type="button"
+  onclick="funcao1()"
+  class="btn btn-primary btn-sm"
+  >provision</a
+>
+<a
+  href="{{url_for('provision_down')}}"
+  type="button"
+  onclick="funcao2()"
+  class="btn btn-danger btn-sm"
+  >destroy</a
+>
+
+<a
+  href="{{url_for('execute_scenario')}}"
+  type="button"
+  onclick="funcao2()"
+  class="btn btn-secondary btn-sm"
+  >execute</a
+>
+{% endblock %}

@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Specify minimum Vagrant version and Vagrant API version
+Vagrant.require_version '>= 1.6.0'
+VAGRANTFILE_API_VERSION = '2'
+
+# Require 'yaml' module
+require 'yaml'
+
+# Edit config.yml to change VM configuration details
+machines = YAML.load_file(File.join(File.dirname(__FILE__), 'config.yaml'))
+
+$SCRIPT = <<-EOF
+server_ip=$(grep 'ip:' /vagrant/config.yaml | cut -d: -f2 | head -n1 | sed -e 's/\"//g')
+echo -e "$server_ip server" | sudo tee -a /etc/hosts
+client_ip=$(grep 'ip:' /vagrant/config.yaml | cut -d: -f2 | tail -n1 | sed -e 's/\"//g')
+echo -e "$client_ip client" | sudo tee -a /etc/hosts
+EOF
+
+# Create boxes
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+   
+  # Iterate through entries in YAML file to create VMs
+  machines.each do |machines|
+    	 
+    # Configure the VMs per details in config.yml
+    config.vm.define machines['traffic'] do |set|
+
+      # Specify the hostname of the VM
+      set.vm.hostname = machines['traffic']
+      
+      if machines['traffic'] == "server"
+       set.vm.box = "ifpb/wave-server"
+       # Specify the hostname of the VM Server
+       set.vm.hostname = "wave-server"
+      else
+       set.vm.box = "ifpb/wave-client"
+       # Specify the hostname of the VM Client
+       set.vm.hostname = "wave-client"
+      end
+ 
+      # Iterate through networks as per settings in machines
+      set.vm.network "private_network", ip: machines['ip']
+
+      # Configure CPU & RAM (VirtualBox)
+      set.vm.provider 'virtualbox' do |vb|
+        vb.memory = machines['ram']
+        vb.cpus = machines['vcpu']
+      end # set.vm.provider 'virtualbox'
+
+      set.vm.provision "shell", inline: $SCRIPT
+    end # config.vm.define
+  end # machines.each
+end # Vagrant.configure

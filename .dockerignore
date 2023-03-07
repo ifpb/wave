@@ -1,0 +1,8 @@
+start-api.sh
+build-img.sh
+Dockerfile
+docker-compose.yml
+venv
+screenshots
+.gitignore
+api

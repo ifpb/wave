@@ -1,0 +1,350 @@
+{% extends 'model.html' %} {% block content %}
+<div class="mt-3 mb-4">
+  <h3 class="text-center">{{ value }}</h3>
+</div>
+<main class="border border-2 p-4 mb-2 rounded">
+  <div class="row g-5">
+    <div class="col-md-8 col-lg-7">
+      <h4 class="mb-3">Traffic destination configuration</h4>
+      <form action="{{ url_for('index') }}" method="post">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="ip-destination">IP address</label>
+            <input
+              class="form-control"
+              type="text"
+              id="ip-destination"
+              name="ipserver"
+              placeholder="0.0.0.0"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="gateway-destination">Gateway</label>
+            <input
+              class="form-control"
+              type="text"
+              id="gateway-destination"
+              name="gtwserver"
+              placeholder="0.0.0.0"
+            />
+          </div>
+
+          <div class="form-check form-check-inline">
+            <label for="select-platform-destination">Select platform</label>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="plafmserver"
+                id="docker-destination"
+                value="docker"
+              />
+              <label class="form-check-label" for="docker-destination">Docker</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="plafmserver"
+                id="vm-server"
+                value="vm"
+              />
+              <label class="form-check-label" for="vm-server">VM</label>
+            </div>
+          </div>
+          <div class="align-content-lg-center">
+            <label for="memoryserver" class="col-form-label">RAM Memory</label>
+
+            <datalist id="steplistmem">
+              <option>4</option>
+              <option>512</option>
+              <option>1024</option>
+              <option>2048</option>
+              <option>3072</option>
+              <option>4096</option>
+              <option>5120</option>
+              <option>6144</option>
+              <option>8192</option>
+            </datalist>
+            <div class="col-md-2">
+              <input
+                type="range"
+                class="form-control-range"
+                name="memserver"
+                id="memoryserver"
+                value="4"
+                min="4"
+                step="2"
+                max="8192"
+                oninput="memserverValue.value=memoryserver.value"
+                list="steplistmem"
+              />
+              <input
+                type="number"
+                placeholder="MB"
+                name="memserverValue"
+                id="memserverValue"
+                value=""
+                class="form-control"
+                min="4"
+                max="8192"
+                step="2"
+                oninput="memoryserver.value=memserverValue.value"
+              />
+            </div>
+
+            <label for="vcpuserver" class="col-form-label">CPUs</label>
+
+            <datalist id="steplistvcpu">
+              <option>1</option>
+              <option>2</option>
+              <option>4</option>
+              <option>6</option>
+              <option>8</option>
+            </datalist>
+            <div class="col-md-2">
+              <input
+                type="range"
+                class="form-control-range"
+                id="vcpuserver"
+                name="cpuserver"
+                value="1"
+                min="1"
+                step="1"
+                max="8"
+                oninput="cpuserverValue.value=vcpuserver.value"
+                list="steplistvcpu"
+              />
+              <input
+                type="number"
+                placeholder="vcpu"
+                name="cpuserverValue"
+                id="cpuserverValue"
+                class="form-control"
+                value=""
+                min="1"
+                step="1"
+                max="8"
+                oninput="vcpuserver.value=cpuserverValue.value"
+              />
+            </div>
+          </div>
+        </div>
+
+        <hr class="my-3" />
+        <h4 class="mb-3">Traffic source configuration</h4>
+
+        <div class="row gy-3">
+          <div class="col-md-4">
+            <label for="ip-source">IP address</label>
+            <input
+              class="form-control"
+              type="text"
+              id="ip-source"
+              name="ipclient"
+              placeholder="0.0.0.0"
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="gateway-source">Gateway</label>
+            <input
+              class="form-control"
+              type="text"
+              name="gtwclient"
+              id="gateway-source"
+              placeholder="0.0.0.0"
+            />
+          </div>
+          <div class="form-check form-check-inline">
+            <label for="">Select platform</label>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="plafmclient"
+                id="docker"
+                value="docker"
+              />
+              <label class="form-check-label" for="docker">Docker</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="plafmclient"
+                id="vm"
+                value="vm"
+              />
+              <label class="form-check-label" for="vm">VM</label>
+            </div>
+          </div>
+          <div class="align-content-lg-center">
+            <label for="memoryclient" class="col-form-label">RAM Memory</label>
+            <div class="col-md-2">
+              <input
+                type="range"
+                class="form-control-range"
+                name="memclient"
+                id="memoryclient"
+                value="4"
+                min="4"
+                step="2"
+                max="8192"
+                oninput="memclientValue.value=memoryclient.value"
+                list="steplistmem"
+              />
+              <input
+                type="number"
+                placeholder="MB"
+                name="memclientValue"
+                id="memclientValue"
+                class="form-control"
+                value=""
+                min="4"
+                max="8192"
+                step="2"
+                oninput="memoryclient.value=memclientValue.value"
+              />
+            </div>
+
+            <label for="vcpuclient" class="col-form-label">CPUs</label>
+
+            <div class="col-md-2">
+              <input
+                type="range"
+                class="form-control-range"
+                id="vcpuclient"
+                name="cpuclient"
+                value="1"
+                min="1"
+                step="1"
+                max="8"
+                oninput="cpuclientValue.value=vcpuclient.value"
+                list="steplistvcpu"
+              />
+              <input
+                type="number"
+                placeholder="vcpu"
+                name="cpuclientValue"
+                id="cpuclientValue"
+                class="form-control"
+                value=""
+                min="1"
+                step="1"
+                max="8"
+                oninput="vcpuclient.value=cpuclientValue.value"
+              />
+            </div>
+
+            <!-- <output id="cpuclientValue">1</output> -->
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="type-app">Model</label>
+            <select
+              class="form-select form-select-sm"
+              id="model-select"
+              name="select-model"
+            >
+              <option selected value="">Select model ...</option>
+              <option value="sin">sinusoid</option>
+              <option value="flashc">flashcrowd</option>
+            </select>
+          </div>
+        </div>
+        <hr class="my-3" />
+        <div class="row g-3" id="sin">
+          <!-- A=$3 #Amplitude P=$4 #Period D=$5 #Duration L=$6 #Lambd -->
+          <div class="col-md-2">
+            <label for="sinusoid" class="col-form-label">Amplitude</label>
+            <input
+              class="form-control"
+              type="text"
+              name="amp-sin"
+              id="amplitude-sinusoid"
+              placeholder="0"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="sinusoid" class="col-form-label">Period</label>
+            <input
+              class="form-control"
+              type="text"
+              name="ped-sin"
+              id="period-sinusoid"
+              placeholder="0"
+            />
+          </div>
+          <div class="col-md-2">
+            <label for="sinusoid" class="col-form-label">Duration</label>
+            <input
+              class="form-control"
+              type="text"
+              name="drn-sin"
+              id="duration-sinusoid"
+              placeholder="0"
+            />
+          </div>
+
+          <div class="col-md-2">
+            <label for="sinusoid" class="col-form-label">Lambd</label>
+            <input
+              class="form-control"
+              type="text"
+              name="lmd-sin"
+              id="lambd-sinusoid"
+              placeholder="0"
+            />
+          </div>
+          <hr class="my-3" />
+        </div>
+        <div class="row g-3" id="flashc">
+          <!-- Rnorm=$3 #Normal load
+          S=$4 #Shock Level
+          n=$5 #Constant from rampdown -->
+          <div class="col-md-3">
+            <label for="flashcrowd" class="col-form-label">Normal Load</label>
+            <input
+              class="form-control"
+              type="text"
+              name="nload-flashc"
+              id="normal-flashcrowd"
+              placeholder="0"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="flashcrowd" class="col-form-label">Shock Level</label>
+            <input
+              class="form-control"
+              type="text"
+              name="shkl-flashc"
+              id="shock-flashcrowd"
+              placeholder="0"
+            />
+          </div>
+          <div class="col-md-3">
+            <label for="flashcrowd" class="col-form-label"
+              >Const RanpDown</label
+            >
+            <input
+              class="form-control"
+              type="text"
+              name="constrp-flashc"
+              id="cranpdown-flashcrowd"
+              placeholder="0"
+            />
+          </div>
+          <hr class="my-3" />
+        </div>
+        <div class="d-grid gap-2 d-md-block">
+          <button class="btn btn-primary btn-lg text-center" type="submit">
+            Submission test
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+
+<script src="../static/index.js"></script>
+
+{% endblock %}

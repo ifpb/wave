@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  app:
+  
+    build: .
+    image: wave_app:1.0
+    container_name: wave_app
+    ports:
+      - "80:5000"
+    volumes:
+      - $PWD/app/provision:/var/www/app/provision
+    environment:
+      STATIC_URL: /static
+      STATIC_PATH: app/static
+      API_PROVISION: $IP_HOST_API
+  grafana:
+    image: grafana/grafana-oss
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
+    depends_on:
+      - app
