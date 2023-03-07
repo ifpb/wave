@@ -21,3 +21,5 @@ build/
 *.egg-info/
 
 .vagrant
+
+config.yaml
