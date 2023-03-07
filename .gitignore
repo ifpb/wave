@@ -22,4 +22,4 @@ build/
 
 .vagrant
 
-config.yaml
+/app/provision/config.yaml
