@@ -1,7 +1,39 @@
+iperf: ignoring extra argument -- server
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+iperf: ignoring extra argument -- server
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+iperf: ignoring extra argument -- server
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+------------------------------------------------------------
+Client connecting to server, TCP port 5001
+TCP window size: 85.0 KByte (default)
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+------------------------------------------------------------
 ------------------------------------------------------------
 Client connecting to server, TCP port 5001
 TCP window size: 85.0 KByte (default)
 ------------------------------------------------------------
-[  1] local 192.168.0.3 port 53432 connected with 192.168.0.2 port 5001
-[ ID] Interval       Transfer     Bandwidth
-[  1] 0.0000-10.0214 sec  1.28 GBytes  1.09 Gbits/sec
+------------------------------------------------------------
+Client connecting to server, TCP port 5001
+TCP window size: 85.0 KByte (default)
+------------------------------------------------------------
+[  1] local 192.168.0.3 port 43212 connected with 192.168.0.2 port 5001
+------------------------------------------------------------
+Client connecting to server, TCP port 5001
+TCP window size: 85.0 KByte (default)
+------------------------------------------------------------
+[  1] local 192.168.0.3 port 43196 connected with 192.168.0.2 port 5001
+[  1] local 192.168.0.3 port 43206 connected with 192.168.0.2 port 5001
+[  1] local 192.168.0.3 port 43226 connected with 192.168.0.2 port 5001
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+------------------------------------------------------------
+Client connecting to server, TCP port 5001
+TCP window size: 85.0 KByte (default)
+------------------------------------------------------------
+[  1] local 192.168.0.3 port 47004 connected with 192.168.0.2 port 5001
+WARNING: client will send traffic forever or until an external signal (e.g. SIGINT or SIGTERM) occurs to stop it
+------------------------------------------------------------
+Client connecting to server, TCP port 5001
+TCP window size: 85.0 KByte (default)
+------------------------------------------------------------
+[  1] local 192.168.0.3 port 50540 connected with 192.168.0.2 port 5001

@@ -13,7 +13,11 @@ else
       
       echo -e "🐍  Activating Python virtual environment... "
       source venv/bin/activate
-
+      pip freeze | grep -E "flask-restx" > /dev/null
+      if [ $? -ne 0 ]; then
+         echo "📦  Installing API dependencies... "
+         pip3 install flask flask-restx > /dev/null
+      fi
    else
       echo "🕒 Craeting Python virtual environment... "
       python3 -m venv venv
