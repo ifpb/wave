@@ -1,19 +1,21 @@
 import os
 import requests
-from flask import Flask, render_template, request, redirect, abort
+from flask import render_template, request, redirect
+from flask import abort, flash
 from pathlib import Path
+from dotenv import load_dotenv
 from provision.confYaml import ConfYaml
 
 
 def configure(app):
+
     path_app = Path(os.path.abspath("app"))
-    config_dir = Path(path_app, "provision")
-
     conf_yaml = ConfYaml()
+    load_dotenv()
 
-    IP_HOST_API = os.environ.get("API_PROVISION")
+    IP_HOST_API = os.environ.get("IP_HOST_API")
     URL_API = f"http://{IP_HOST_API}:8181/provision"
-    URL_GRAFANA = f"http://{IP_HOST_API}:3000/login"
+    URL_GRAFANA = f"http://{IP_HOST_API}:3000"
 
     @app.route('/', methods=["GET", "POST"])
     def index():
@@ -49,7 +51,7 @@ def configure(app):
   l: "{request.form.get('lmd-sin')}"
 """
             conf_yaml.set_conf(conf)
-            conf_yaml.set_conf_model(conf+conf_model_sin)
+            conf_yaml.set_conf_model(conf + conf_model_sin)
 
         elif (request.form.get('select-model') == 'flashc'):
 
@@ -60,7 +62,7 @@ def configure(app):
   crd: "{request.form.get('constrp-flashc')}"
 """
             conf_yaml.set_conf(conf)
-            conf_yaml.set_conf_model(conf+conf_model_flashc)
+            conf_yaml.set_conf_model(conf + conf_model_flashc)
 
         else:
             conf_yaml.set_conf(conf)
@@ -72,19 +74,17 @@ def configure(app):
     @app.route('/config')
     def config_result():
         config_yaml_dir = Path(path_app, "provision", "config.yaml")
+        try:
+            with open(config_yaml_dir, "w") as f:
+                conf = conf_yaml.get_conf()
+                f.write(conf)
+                return render_template('config-result.html',
+                                       conf=conf_yaml.get_conf_model())
 
-        if conf_yaml.valid_conf():
-            try:
-                with open(config_yaml_dir, "w") as f:
-                    conf = conf_yaml.get_conf()
-                    f.write(conf)
-                    return render_template('config-result.html',
-                                           conf=conf_yaml.get_conf_model())
-
-            except FileNotFoundError:
-                value = "Failed to generate the configuration file!"
-                return render_template('default.html', value=value)
-        else:
+        except FileNotFoundError:
+            value = "Failed to generate the configuration file!"
+            return render_template('default.html', value=value)
+        except (AttributeError, TypeError) as value:
             value = """The configuration for provisioning was not completed,
         return to the Home page to set up the provisioning environment."""
             return render_template('default.html', value=value)
@@ -101,13 +101,14 @@ def configure(app):
                 abort(404)
 
             elif res_result["provision"] == "up":
-                # flash(f"Provisionamento realizado com sucesso", "success")
-                value = "Provisioning successful!"
-                return render_template('default.html', value=value)
+                flash("Provisioning successful!", "success")
+                return redirect("/execute")
 
         except requests.exceptions.ConnectionError:
-            value = "Connection API Fail!"
-            return render_template('default.html', value=value)
+            flash("Connection API Fail!", "danger")
+            return redirect('/config')
+            # value = "Connection API Fail!"
+            # return render_template('default.html', value=value)
 
     @app.route('/down')
     def provision_down():
@@ -119,33 +120,19 @@ def configure(app):
                 abort(404)
             elif res_result["provision"] == "down":
 
-                value = "Environment destroyed successfully!"
-                return render_template('default.html', value=value)
+                flash("Environment destroyed successfully!", "success")
+
+                return redirect('/')
 
         except requests.exceptions.ConnectionError:
-            value = "Connection API Fail!"
-            return render_template('default.html', value=value)
-
-    @app.route('/results')
-    def analysis_result():
-        try:
-            resquest = requests.get(f"{URL_API}/results")
-            res_analysis_result = resquest.json()
-
-            if 'error' in res_analysis_result:
-                abort(404)
-
-            return render_template('analysis-result.html',
-                                   res_analysis_result=res_analysis_result, grafana=URL_GRAFANA)
-
-        except requests.exceptions.ConnectionError:
-            value = "Connection API Fail!"
-            return render_template('default.html', value=value)
+            # value = "Connection API Fail!"
+            flash("Connection API Fail!", "error")
+            return redirect('/results')
 
     @app.route('/execute')
     def execute_scenario():
-        conf_dict = conf_yaml.conf_model_dict()
         try:
+            conf_dict = conf_yaml.conf_model_dict()
             if conf_dict[2]['model'] == 'sin':
                 a = conf_dict[2]['a']
                 p = conf_dict[2]['p']
@@ -170,7 +157,31 @@ def configure(app):
             elif res_result["provision"] == "executed":
                 return redirect("/results")
         except requests.exceptions.ConnectionError:
-            value = "Connection API Fail!"
+            flash("Connection API Fail!", "danger")
+            return redirect('/config')
+
+    @app.route('/results')
+    def analysis_result():
+        try:
+            conf_dict = conf_yaml.conf_model_dict()
+            resquest_gr = requests.get(
+                f"{URL_API}/grafana/config?host_promts={conf_dict[0]['ip']}")
+
+            config_gr = resquest_gr.json()
+            dashboard_uid = config_gr['dashboardUid']
+
+            if 'error' in config_gr:
+                abort(404)
+
+            return render_template('analysis-result.html',
+                                   url_grafana=URL_GRAFANA, dashboard_uid=dashboard_uid)
+
+        except requests.exceptions.ConnectionError:
+            flash("Connection API Fail!", "danger")
+            return redirect('/config')
+        except AttributeError:
+            value = """The configuration for provisioning was not completed,
+        return to the Home page to set up the provisioning environment."""
             return render_template('default.html', value=value)
 
     @app.errorhandler(404)

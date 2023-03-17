@@ -1,8 +1,9 @@
 import yaml
 
+
 class ConfYaml:
     def __init__(self, conf=None, conf_model=None):
-        self.__conf = conf 
+        self.__conf = conf
         self.__conf_model = conf_model
 
     def get_conf(self):
@@ -16,12 +17,13 @@ class ConfYaml:
 
     def set_conf_model(self, setConfModel):
         self.__conf_model = setConfModel
-        
+
     def conf_model_dict(self):
         dict_conf = yaml.load(self.__conf_model, Loader=yaml.FullLoader)
         return dict_conf
 
     def valid_conf(self):
-       if self.__conf is None:
-          return False
-       return True
+        if self.__conf_model is None:
+            return False
+        else:
+            return True

@@ -1,15 +1,15 @@
 ---
 - traffic: server
-  ip: ""
+  ip: "192.168.0.2"
   gateway: ""
-  ram: "4"
-  vcpu: "1"
+  ram: "1024"
+  vcpu: "2"
   platform: None
 
 - traffic: client
-  ip: ""
+  ip: "192.168.0.3"
   gateway: ""
-  ram: "4"
-  vcpu: "1"
-  platform: None
+  ram: "512"
+  vcpu: "2"
+  platform: vm
 

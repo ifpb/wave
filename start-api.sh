@@ -16,7 +16,7 @@ else
       pip freeze | grep -E "flask-restx" > /dev/null
       if [ $? -ne 0 ]; then
          echo "📦  Installing API dependencies... "
-         pip3 install flask flask-restx > /dev/null
+         pip3 install flask flask-restx dotenv > /dev/null
       fi
    else
       echo "🕒 Craeting Python virtual environment... "
@@ -25,7 +25,7 @@ else
       source venv/bin/activate
       
       echo "📦  Installing API dependencies... "
-      pip3 install flask flask-restx > /dev/null 
+      pip3 install flask flask-restx  dotenv > /dev/null 
    fi
 
 fi

@@ -1,14 +1,33 @@
 {% extends 'model.html' %} {% block content %}
+
 <div class="m-3" style="min-height: 410px">
   <h3 class="text-center">Analysis Result</h3>
-  <pre>{{ res_analysis_result }}</pre>
+  <div class="row">
+    <div class="col-5">
+      <div class="embed-responsive embed-responsive-16by9">
+        <iframe
+          class="embed-responsive-item"
+          src="{{ url_grafana }}/d-solo/{{ dashboard_uid }}/network-traffic?orgId=1&refresh=5s&from=now-30m&to=now&panelId=1"
+          width="550"
+          height="350"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+
   <a
-    href="{{ grafana }}"
+    href="{{ url_grafana }}/login"
     type="button"
     target="_blank"
     class="btn btn-secondary btn-sm"
-    >result grafana</a
+    >sign in grafana</a
+  >
+
+  <a
+    href="{{url_for('provision_down')}}"
+    type="button"
+    class="btn btn-danger btn-sm"
+    >destroy</a
   >
 </div>
-
 {% endblock %}

@@ -22,6 +22,7 @@ case $OPTION in
         "--destroy")
                 echo -e '🔴  Destroying containers and images ...'
                 docker-compose down --rmi all
+                echo "" > .env
                 echo -e '🤝  Finished environment ...'
                 ;;
         *)

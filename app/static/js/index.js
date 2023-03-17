@@ -40,7 +40,7 @@ document.getElementById("model-select").addEventListener("change", function() {
   modelsParms.forEach((valor) => {
     document.getElementById(valor).style.display = "none";
   });
-  var selectedDiv = document.getElementById(this.value);
+  let selectedDiv = document.getElementById(this.value);
   if(selectedDiv){
     selectedDiv.style.display = "flex";
   }
