@@ -23,3 +23,5 @@ build/
 .vagrant
 .vscode
 .flake8
+
+app/provision/config.yaml
