@@ -3,6 +3,7 @@ from provision import Provision
 from pathlib import Path
 from flask import Flask
 from flask_restx import Resource, Api, reqparse
+from conf_grafana import generateAPIKey, createDataSources, createDashboard
 
 app = Flask(__name__)
 api = Api(app, version='1.0', title='LoadGen API',
@@ -24,12 +25,36 @@ parser_flashc.add_argument('nl', type=str, help='Flashcrowd - Normal Load')
 parser_flashc.add_argument('sl', type=str, help='Flashcrowd - Shock Level')
 parser_flashc.add_argument('crd', type=str, help='Flashcrowd - Const RanpDown')
 
+parser_host_prmots = reqparse.RequestParser()
+parser_host_prmots.add_argument(
+    'host_promts', type=str, help='IP Host runner Promethues')
+
 
 @api.route('/provision/up')
 class ProvisionInit(Resource):
     def get(self):
         pro_env.up()
         return {'provision': 'up'}
+
+
+@api.route('/provision/grafana/config')
+class ProvisionGrafana(Resource):
+    @api.doc(parser=parser_host_prmots)
+    def get(self):
+        # conf Grafana
+        api_key = generateAPIKey.create_api_key_grf()
+        host_promts = parser_host_prmots.parse_args()['host_promts']
+        data_src = createDataSources.create_data_src(host_promts, api_key)
+        dashboard = createDashboard.create_dashboard(api_key, data_src)
+
+        response = {
+            'provision': 'executed',
+            'apiKey': api_key,
+            'dataSrcUid': data_src,
+            'dashboardUid': dashboard
+        }
+
+        return response
 
 
 @api.route('/provision/down')
@@ -39,22 +64,8 @@ class ProvisionDestroy(Resource):
         return {'provision': 'down'}
 
 
-@api.route('/provision/results')
-class ProvisionResult(Resource):
-    def get(self):
-        analysis_result = pro_env.result()
-        return analysis_result
-
-
-@api.route('/provision/execute')
-class ProvisionExcuteScenario(Resource):
-    def get(self):
-        pro_env.execute_scenario(15)
-        return {'provision': 'executed'}
-
-
 @api.route('/provision/execute/model/sin')
-class ProvisionExcuteScenario(Resource):
+class ProvisionExcuteScenarioSin(Resource):
     @api.doc(parser=parser_sin)
     def get(self):
         args = parser_sin.parse_args()
@@ -65,7 +76,7 @@ class ProvisionExcuteScenario(Resource):
 
 
 @api.route('/provision/execute/model/flashc')
-class ProvisionExcuteScenario(Resource):
+class ProvisionExcuteScenarioFlashc(Resource):
     @api.doc(parser=parser_flashc)
     def get(self):
         args = parser_flashc.parse_args()
