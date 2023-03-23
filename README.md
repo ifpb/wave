@@ -2,7 +2,6 @@
 
 ## Configurator WAVE 
 
-pegar a secao 1 (toda), na secao 2 pegar os topicos 2.1, 2.2 e 2.3 e a secao 4.1
 
 ## 1 Verificando os Requisitos Necessários
 
