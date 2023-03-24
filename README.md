@@ -45,7 +45,7 @@ Como pode ser observado na figura acima, o módulo de Inicialização do WAVE ut
 
 ### O módulo WAVE Web pode ser acessado via navegador:
 
-![wave-web-deprovisioned](https://user-images.githubusercontent.com/79940823/227387686-634fc6ee-bb3c-4bb4-9ef0-28e8e0459175.png)
+![wave-web-home](https://user-images.githubusercontent.com/79940823/227392316-1a45422c-8d38-4562-9094-6a39302bae98.png)
 
 O formulário contém campos para inserir dados de rede tanto da origem da carga de tráfego quanto do destino. Além do endereço IP e gateway (caso origem e destino estiverem em redes separadas), é possível selecionar o provisionamento do ambiente através de máquina virtual com configuração de tamanho de memória e quantidade de CPUs virtuais. A opção de provisionamento por contêiner e a comunicação via gateway são funcionalidades futuras, ainda não implementadas. Por fim, o usuário pode escolher qual modelo de carga de trabalho ele deseja aplicar, seja sinusoid ou flashcrowd.
 
