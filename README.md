@@ -1,5 +1,7 @@
 # WAVE - Gerador de cargas múltiplas para experimentação em redes de computadores
 
+[Manual do Usuário do WAVE](Manual_do_Usuario_do_WAVE.pdf)
+
 ## Verificando os Requisitos Necessários
 
 ### Verificando a se o Python3 está instalado e qual versão:
