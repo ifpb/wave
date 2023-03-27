@@ -2,6 +2,8 @@
 
 [Manual do Usuário do WAVE](Manual_do_Usuario_do_WAVE.pdf)
 
+[Vídeo Explicativo](https://www.youtube.com/watch?v=AOsvDJgxGQ8&ab_channel=JeffersonLucasFerreiradaSilva)
+
 ## Verificando os Requisitos Necessários
 
 ### Verificando a se o Python3 está instalado e qual versão:
