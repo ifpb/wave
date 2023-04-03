@@ -107,8 +107,6 @@ def configure(app):
         except requests.exceptions.ConnectionError:
             flash("Connection API Fail!", "danger")
             return redirect('/config')
-            # value = "Connection API Fail!"
-            # return render_template('default.html', value=value)
 
     @app.route('/down')
     def provision_down():
@@ -125,7 +123,6 @@ def configure(app):
                 return redirect('/')
 
         except requests.exceptions.ConnectionError:
-            # value = "Connection API Fail!"
             flash("Connection API Fail!", "error")
             return redirect('/results')
 
@@ -138,7 +135,6 @@ def configure(app):
                 p = conf_dict[2]['p']
                 d = conf_dict[2]['d']
                 l = conf_dict[2]['l']
-                # print(a, p, d, l)
                 resquest = requests.get(
                     f"{URL_API}/execute/model/sin?a={a}&p={p}&d={d}&l={l}")
                 res_result = resquest.json()
@@ -147,7 +143,6 @@ def configure(app):
                 nl = conf_dict[2]['nl']
                 sl = conf_dict[2]['sl']
                 crd = conf_dict[2]['crd']
-                # print(nl, sl, crd)
                 resquest = requests.get(
                     f"{URL_API}/execute/model/flashc?nl={nl}&sl={sl}&crd={crd}")
                 res_result = resquest.json()
@@ -164,17 +159,20 @@ def configure(app):
     def analysis_result():
         try:
             conf_dict = conf_yaml.conf_model_dict()
+            model = 'sinusoid' if conf_dict[2]['model'] == 'sin' else 'flashcrowd'
             resquest_gr = requests.get(
-                f"{URL_API}/grafana/config?host_promts={conf_dict[0]['ip']}")
+                f"""{URL_API}/grafana/config?host_promts={conf_dict[0]['ip']}&wave_model={model}""")
 
             config_gr = resquest_gr.json()
+
             dashboard_uid = config_gr['dashboardUid']
 
             if 'error' in config_gr:
                 abort(404)
 
             return render_template('analysis-result.html',
-                                   url_grafana=URL_GRAFANA, dashboard_uid=dashboard_uid)
+                                   url_grafana=URL_GRAFANA,
+                                   dashboard_uid=dashboard_uid)
 
         except requests.exceptions.ConnectionError:
             flash("Connection API Fail!", "danger")

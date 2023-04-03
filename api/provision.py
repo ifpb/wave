@@ -24,7 +24,6 @@ class Provision:
 
     def up(self):
         command = "vagrant up"
-
         return self.execute_command(command)
 
     def down(self):
@@ -33,10 +32,8 @@ class Provision:
 
     def execute_scenario(self, *args):
         if args[0] == 'sin':
-            command = f"""vagrant ssh client -c './wave/run_wave.sh -l
-            sinusoid {args[1]} {args[2]} { args[3]} {args[4]}'"""
+            command = f"""vagrant ssh client -c './wave/run_wave.sh -l sinusoid {args[1]} {args[2]} { args[3]} {args[4]}'"""
             return self.execute_command(command)
         else:
-            command = f"""vagrant ssh client -c './wave/run_wave.sh -l
-            flashcrowd {args[1]} {args[2]} { args[3]}'"""
+            command = f"""vagrant ssh client -c './wave/run_wave.sh -l flashcrowd {args[1]} {args[2]} { args[3]}'"""
             return self.execute_command(command)

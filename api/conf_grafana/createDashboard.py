@@ -1,15 +1,13 @@
-import requests
-import json
 import os
-from pathlib import Path
-from dotenv import load_dotenv
+import json
+import requests
+from dotenv import load_dotenv, set_key, get_key
 
 load_dotenv()
 
-path_env = Path(os.path.abspath(""))
 IP_API_GR = os.getenv("IP_HOST_API")
-URL_API_DASHBOARD = f'http://{IP_API_GR}:3000/api/dashboards/db'
-DATASOURCE_UID = os.getenv("DATASOURCE_UID")
+URL_API_DASHBOARD = f'http://{IP_API_GR}:3000/api/dashboards'
+
 
 headers = {"Content-Type": "application/json",
            "Authorization": ""}
@@ -198,6 +196,111 @@ data = {
                 "yaxis": {
                     "align": False
                 }
+            },
+            {
+                "datasource": {
+                    "type": "marcusolsson-csv-datasource",
+                            "uid": ""
+                },
+                "fieldConfig": {
+                    "defaults": {
+                        "color": {
+                            "mode": "palette-classic"
+                        },
+                        "custom": {
+                            "axisCenteredZero": False,
+                            "axisColorMode": "text",
+                            "axisLabel": "",
+                            "axisPlacement": "auto",
+                            "barAlignment": 0,
+                            "drawStyle": "line",
+                            "fillOpacity": 25,
+                            "gradientMode": "none",
+                            "hideFrom": {
+                                "legend": False,
+                                "tooltip": False,
+                                "viz": False
+                            },
+                            "lineInterpolation": "smooth",
+                            "lineWidth": 1,
+                            "pointSize": 4,
+                            "scaleDistribution": {
+                                "type": "linear"
+                            },
+                            "showPoints": "auto",
+                            "spanNulls": False,
+                            "stacking": {
+                                "group": "A",
+                                "mode": "none"
+                            },
+                            "thresholdsStyle": {
+                                "mode": "off"
+                            }
+                        },
+                        "mappings": [],
+                        "thresholds": {
+                            "mode": "absolute",
+                                    "steps": [
+                                        {
+                                            "color": "green",
+                                            "value": None
+                                        },
+                                        {
+                                            "color": "red",
+                                            "value": 80
+                                        }
+                                    ]
+                        }
+                    },
+                    "overrides": []
+                },
+                "gridPos": {
+                    "h": 8,
+                    "w": 12,
+                    "x": 0,
+                    "y": 0
+                },
+                "id": None,
+                "options": {
+                    "legend": {
+                        "calcs": [],
+                        "displayMode": "list",
+                        "placement": "bottom",
+                        "showLegend": True
+                    },
+                    "tooltip": {
+                        "mode": "single",
+                                "sort": "none"
+                    }
+                },
+                "pluginVersion": "9.4.3",
+                "targets": [
+                    {
+                        "datasource": {
+                            "uid": "marcusolsson-csv-datasource",
+                        },
+                        "decimalSeparator": ".",
+                        "delimiter": ",",
+                        "header": True,
+                        "ignoreUnknown": False,
+                        "refId": "A",
+                        "schema": [
+                            {
+                                "name": "Time",
+                                        "type": "time"
+                            },
+                            {
+                                "name": "Instances",
+                                        "type": "number"
+                            }
+                        ],
+                        "skipRows": 0,
+                        "timezone": "America/Recife"
+                    }
+                ],
+                "title": "Instances Iperf",
+                "transparent": True,
+                "type": "timeseries"
             }
         ],
         "refresh": "5s",
@@ -244,41 +347,43 @@ data = {
         },
         "time": {"from": "now-30m", "to": "now"},
         "timezone": "browser",
-        "title": "Network Traffic"
+        "title": "Wave - Analysis Results"
     }
 }
 
 # Criar o dashboard
 
 
-def create_dashboard(api_key, data_src_uid):
+def create_dashboard(api_key, promts_data_src_uid, csv_data_src_uid):
 
-    load_dotenv()
     headers["Authorization"] = f"Bearer {api_key}"
 
-    data["dashboard"]["panels"][0]["datasource"]["uid"] = f"{data_src_uid}"
+    data["dashboard"]["panels"][0][
+        "datasource"]["uid"] = f"{promts_data_src_uid}"
     data["dashboard"]["templating"]["list"][0][
-        "datasource"]["uid"] = f"{data_src_uid}"
-    # data["dashboard"]["panels"][1]["datasource"]["uid"] = f"{data_src_uid}"
-    print(data["dashboard"]["panels"][0]["datasource"]["uid"])
+        "datasource"]["uid"] = f"{promts_data_src_uid}"
 
-    grafana_dashboard = os.getenv("DASHBOARD_UID")
+    data["dashboard"]["panels"][1][
+        "datasource"]["uid"] = f"{csv_data_src_uid}"
 
-    if grafana_dashboard is not None:
-        return grafana_dashboard
+    DASHBOARD_UID = os.getenv('DASHBOARD_UID')
+    if DASHBOARD_UID:
+        DASHBOARD_UID = get_key('.env', 'DASHBOARD_UID', encoding='utf-8')
+        response_dashb = requests.get(
+            f"{URL_API_DASHBOARD}/uid/{DASHBOARD_UID}", headers=headers)
+        if response_dashb.status_code == 200:
+            return DASHBOARD_UID
 
     response = requests.post(
-        URL_API_DASHBOARD, headers=headers, data=json.dumps(data))
+        f"{URL_API_DASHBOARD}/db", headers=headers, data=json.dumps(data))
 
     if response.status_code == 200:
         # Extrair o valor do uid dashbord do corpo da resposta
         dashb_uid = response.json()["uid"]
 
         # Armazenar o valor do uid em uma variável de ambiente
-        with open(".env", "a") as env_file:
-            env_file.write(f"\nDASHBOARD_UID=\'{dashb_uid}\'")
-            os.environ["DASHBOARD_UID"] = dashb_uid
-            return dashb_uid
-
+        set_key(".env", "DASHBOARD_UID", f'{dashb_uid}',
+                quote_mode='always', export=False, encoding='utf-8')
+        return dashb_uid
     else:
         return response.json()

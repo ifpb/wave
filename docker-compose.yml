@@ -19,11 +19,16 @@ services:
     container_name: grafana
     ports:
       - "3000:3000"
+    volumes:
+      - $PWD/app/provision/logs:/var/lib/grafana/csv
     environment:
       GF_SECURITY_ALLOW_EMBEDDING: "true"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: 'Viewer'
       GF_AUTH_BASIC_ENABLED: "true"
+      GF_INSTALL_PLUGINS: "marcusolsson-csv-datasource"
+      GF_PLUGIN_ALLOW_LOCAL_MODE: "true"
+
 
     depends_on:
       - app
