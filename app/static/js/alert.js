@@ -1,7 +1,7 @@
- export function setAlert(){
- // Selects the element with the "alert" class
-  const alertElement = document.querySelector(".alert");
-
+// Selects the element with the "alert" class
+ const alertElement = document.querySelector(".alert");
+ function setAlert(){
+  
 // Sets the number of seconds that the alert should be visible
   const secondsToShow = 5;
 
@@ -14,5 +14,7 @@
   setTimeout(hideAlert, secondsToShow * 1000);
 
 }
-  
-setAlert()
+if (alertElement !== null) {
+
+  setAlert()
+}

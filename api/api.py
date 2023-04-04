@@ -25,9 +25,11 @@ parser_flashc.add_argument('nl', type=str, help='Flashcrowd - Normal Load')
 parser_flashc.add_argument('sl', type=str, help='Flashcrowd - Shock Level')
 parser_flashc.add_argument('crd', type=str, help='Flashcrowd - Const RanpDown')
 
-parser_host_prmots = reqparse.RequestParser()
-parser_host_prmots.add_argument(
+parser_config_grafana = reqparse.RequestParser()
+parser_config_grafana.add_argument(
     'host_promts', type=str, help='IP Host runner Promethues')
+parser_config_grafana.add_argument(
+    'wave_model', type=str, help='Wave model')
 
 
 @api.route('/provision/up')
@@ -39,19 +41,30 @@ class ProvisionInit(Resource):
 
 @api.route('/provision/grafana/config')
 class ProvisionGrafana(Resource):
-    @api.doc(parser=parser_host_prmots)
+    @api.doc(parser=parser_config_grafana)
     def get(self):
         # conf Grafana
+        host_promts = parser_config_grafana.parse_args()['host_promts']
+        wave_model = parser_config_grafana.parse_args()['wave_model']
+
         api_key = generateAPIKey.create_api_key_grf()
-        host_promts = parser_host_prmots.parse_args()['host_promts']
-        data_src = createDataSources.create_data_src(host_promts, api_key)
-        dashboard = createDashboard.create_dashboard(api_key, data_src)
+
+        promts_data_src_uid = createDataSources.create_data_src(
+            f'http://{host_promts}:9090', api_key, 'prometheus')['uid']
+
+        csv_data_src_uid = createDataSources.create_data_src(
+            f'/var/lib/grafana/csv/{wave_model}_wave.csv',
+            api_key, 'csv')['uid']
+
+        dashboard_uid = createDashboard.create_dashboard(
+            api_key, promts_data_src_uid, csv_data_src_uid)
 
         response = {
             'provision': 'executed',
             'apiKey': api_key,
-            'dataSrcUid': data_src,
-            'dashboardUid': dashboard
+            'promtsDataSrcUid': promts_data_src_uid,
+            'CSVDataSrcUid': csv_data_src_uid,
+            'dashboardUid': dashboard_uid
         }
 
         return response
