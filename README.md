@@ -4,6 +4,8 @@
 
 [Vídeo Explicativo](https://www.youtube.com/watch?v=AOsvDJgxGQ8&ab_channel=JeffersonLucasFerreiradaSilva)
 
+[Artigo Salão de Ferramentas SBRC 2023](https://doi.org/10.5753/sbrc_estendido.2023.712)
+
 ## Verificando os Requisitos Necessários
 
 ### Verificando a se o Python3 está instalado e qual versão:
